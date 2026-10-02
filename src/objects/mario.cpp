@@ -1,6 +1,7 @@
 #include "mario.hpp"
 
 #include "map_movable.hpp"
+#include "moving_platform.hpp"
 
 using biv::Mario;
 
@@ -13,6 +14,17 @@ biv::Rect Mario::get_rect() const noexcept {
 
 biv::Speed Mario::get_speed() const noexcept {
 	return {vspeed, hspeed};
+}
+
+void Mario::move_horizontally() noexcept {
+	if (current_platform != nullptr) {
+		// Перенос каждый кадр, а не только в момент обнаружения
+		// столкновения - иначе из-за округления Марио периодически
+		// отстаёт от платформы и слетает с неё.
+		top_left.x += current_platform->get_speed().h;
+	} else {
+		Movable::move_horizontally();
+	}
 }
 
 void Mario::move_map_left() noexcept {
@@ -32,11 +44,15 @@ void Mario::process_mario_collision(Collisionable* mario) noexcept {}
 
 void Mario::process_vertical_static_collision(Rect* obj) noexcept {
 	if (vspeed > 0) {
-		// Марио упал на корабль.
+		// Марио упал на корабль (или на движущуюся платформу) - стоим
+		// на нём сверху, запоминаем платформу для переноса в move_horizontally().
 		top_left.y -= vspeed;
+		current_platform = dynamic_cast<MovingPlatform*>(obj);
 	} else if (vspeed < 0) {
-		// Марио ударился головой о полку и после этого должен падать вниз.
+		// Марио ударился головой о полку снизу и после этого должен
+		// падать вниз - он не "стоит" ни на какой платформе.
 		top_left.y -= vspeed;
+		current_platform = nullptr;
 	}
 	vspeed = 0;
 }
