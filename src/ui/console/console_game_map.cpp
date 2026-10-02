@@ -6,6 +6,8 @@
 
 #ifdef LINUX_CONSOLE
 	#include <ncurses.h>
+#elif defined(WINDOWS_CONSOLE)
+	#include <windows.h>
 #endif
 
 using biv::ConsoleGameMap;
@@ -85,7 +87,15 @@ void ConsoleGameMap::remove_objs() {
 
 void ConsoleGameMap::show() const noexcept {
 	#ifdef WINDOWS_CONSOLE
+		// Каждая строка позиционируется явно (как это делает ncurses'
+		// move() на Linux), чтобы автоперенос Windows-консоли, если он
+		// всё же случится, не "съезжал" последующие строки карты.
+		void* handle = GetStdHandle(STD_OUTPUT_HANDLE);
 		for (int i = 0; i < height; i++) {
+			COORD coord;
+			coord.X = 0;
+			coord.Y = static_cast<SHORT>(i);
+			SetConsoleCursorPosition(handle, coord);
 			std::cout << map[i];
 		}
 	#elif defined(LINUX_CONSOLE)

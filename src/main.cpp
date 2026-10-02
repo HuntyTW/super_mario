@@ -21,7 +21,7 @@
 #include <thread>
 
 #include "console_ui_factory.hpp"
-#include "first_level.hpp"
+#include "second_level.hpp"
 #include "game.hpp"
 #include "game_level.hpp"
 #include "game_map.hpp"
@@ -50,7 +50,7 @@ int main() {
 	biv::OSControlSettings* control_settings = nullptr;
 	biv::KeyBoard* keyboard = nullptr;
 	#ifdef WINDOWS_CONSOLE
-		control_settings = new biv::WindowsControlSettings();
+		control_settings = new biv::WindowsControlSettings(map_height, map_weight);
 		keyboard = new biv::WindowsKeyBoard();
 		frame_delay = std::chrono::milliseconds(10);
 	#elif defined(LINUX_CONSOLE)
@@ -65,7 +65,10 @@ int main() {
 	biv::Game game;
 	biv::UIFactory* ui_factory = new biv::ConsoleUIFactory(&game);
 	biv::GameMap* game_map = ui_factory->get_game_map(map_height, map_weight);
-	biv::GameLevel* game_level = new biv::FirstLevel(ui_factory);
+	// ВРЕМЕННО (для теста платформ): старт сразу со второго уровня.
+	// Чтобы вернуть обычный старт с первого уровня - верни
+	// `new biv::FirstLevel(ui_factory)` и include "first_level.hpp" выше.
+	biv::GameLevel* game_level = new biv::SecondLevel(ui_factory);
 	biv::Mario* mario = ui_factory->get_mario();
 	
 	biv::UserInput user_input;
