@@ -40,6 +40,7 @@ void SecondLevel::init_data() {
 	ui_factory->create_enemy({85, 20}, 3, 2);
 	ui_factory->create_enemy({92, 20}, 3, 2);
 
+	// Движущаяся платформа над морем между кораблями.
 	ui_factory->create_moving_platform({105, 22}, 6, 2, 10);
 
 	ui_factory->create_ship({120, 20}, 10, 7);

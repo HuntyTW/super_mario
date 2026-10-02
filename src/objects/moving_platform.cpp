@@ -30,5 +30,17 @@ void MovingPlatform::move_horizontally() noexcept {
 }
 
 void MovingPlatform::move_vertically() noexcept {
+	// Платформа не падает - она парит на одной и той же высоте.
+}
 
+void MovingPlatform::move_map_left() noexcept {
+	RectMapMovableAdapter::move_map_left();
+	left_bound -= MapMovable::MAP_STEP;
+	right_bound -= MapMovable::MAP_STEP;
+}
+
+void MovingPlatform::move_map_right() noexcept {
+	RectMapMovableAdapter::move_map_right();
+	left_bound += MapMovable::MAP_STEP;
+	right_bound += MapMovable::MAP_STEP;
 }
