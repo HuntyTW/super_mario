@@ -1,7 +1,6 @@
 #include "mario.hpp"
 
 #include "map_movable.hpp"
-#include "moving_platform.hpp"
 
 using biv::Mario;
 
@@ -16,14 +15,22 @@ biv::Speed Mario::get_speed() const noexcept {
 	return {vspeed, hspeed};
 }
 
+bool Mario::is_immortal() const noexcept {
+	return immortal;
+}
+
+void Mario::make_immortal() noexcept {
+	immortal = true;
+}
+
 void Mario::move_horizontally() noexcept {
-	if (current_platform != nullptr) {
+	Movable::move_horizontally();
+	if (support != nullptr) {
 		// Перенос каждый кадр, а не только в момент обнаружения
 		// столкновения - иначе из-за округления Марио периодически
-		// отстаёт от платформы и слетает с неё.
-		top_left.x += current_platform->get_speed().h;
-	} else {
-		Movable::move_horizontally();
+		// отстаёт от поверхности и слетает с неё. У неподвижных
+		// поверхностей скорость нулевая, так что они ничего не меняют.
+		top_left.x += support->get_surface_speed().h;
 	}
 }
 
@@ -44,15 +51,15 @@ void Mario::process_mario_collision(Collisionable* mario) noexcept {}
 
 void Mario::process_vertical_static_collision(Rect* obj) noexcept {
 	if (vspeed > 0) {
-		// Марио упал на корабль (или на движущуюся платформу) - стоим
-		// на нём сверху, запоминаем платформу для переноса в move_horizontally().
+		// Марио упал на какую-то поверхность - стоим на ней сверху,
+		// запоминаем её для переноса в move_horizontally().
 		top_left.y -= vspeed;
-		current_platform = dynamic_cast<MovingPlatform*>(obj);
+		support = obj;
 	} else if (vspeed < 0) {
 		// Марио ударился головой о полку снизу и после этого должен
-		// падать вниз - он не "стоит" ни на какой платформе.
+		// падать вниз - он ни на чём не "стоит".
 		top_left.y -= vspeed;
-		current_platform = nullptr;
+		support = nullptr;
 	}
 	vspeed = 0;
 }

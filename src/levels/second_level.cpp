@@ -26,6 +26,10 @@ biv::GameLevel* SecondLevel::get_next() {
 void SecondLevel::init_data() {
 	ui_factory->create_mario({39, 10}, 3, 3);
 
+	// Коробка с сердечком (бессмертие) в самом начале уровня,
+	// чуть левее места появления Марио.
+	ui_factory->create_heart_box({23, 15}, 5, 3);
+
 	ui_factory->create_ship({20, 25}, 40, 2);
 	ui_factory->create_jumping_enemy({30, 20}, 3, 2);
 

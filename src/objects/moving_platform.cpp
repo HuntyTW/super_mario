@@ -12,7 +12,7 @@ MovingPlatform::MovingPlatform(
 	right_bound = top_left.x + range;
 }
 
-biv::Speed MovingPlatform::get_speed() const noexcept {
+biv::Speed MovingPlatform::get_surface_speed() const noexcept {
 	return {vspeed, hspeed};
 }
 

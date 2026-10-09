@@ -1,7 +1,12 @@
 target_sources(${PROJECT_NAME}
 	PRIVATE
+		collectible.cpp
 		full_box.cpp
+		heart.cpp
+		heart_box.cpp
+		item_box.cpp
 		enemy.cpp
+		enemy_base.cpp
 		flying_enemy.cpp
 		jumping_enemy.cpp
 		mario.cpp

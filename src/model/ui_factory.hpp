@@ -27,6 +27,10 @@ namespace biv {
 				const Coord& top_left, const int width, const int height) = 0;
 			virtual void create_full_box(
 				const Coord& top_left, const int width, const int height) = 0;
+			virtual void create_heart(
+				const Coord& top_left, const int width, const int height) = 0;
+			virtual void create_heart_box(
+				const Coord& top_left, const int width, const int height) = 0;
 			virtual void create_jumping_enemy(
 				const Coord& top_left, const int width, const int height) = 0;
 			virtual void create_mario(

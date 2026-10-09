@@ -13,6 +13,12 @@ namespace biv {
 			bool is_active() const noexcept;
 			void kill() noexcept;
 
+			// Бессмертие - необязательная возможность: по умолчанию объект
+			// смертен и сделать его бессмертным нельзя. Переопределяет
+			// тот, кто умеет быть бессмертным (Марио).
+			virtual bool is_immortal() const noexcept { return false; }
+			virtual void make_immortal() noexcept {}
+
 			virtual Rect get_rect() const noexcept = 0;
 			virtual Speed get_speed() const noexcept = 0;
 

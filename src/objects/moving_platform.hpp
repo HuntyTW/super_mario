@@ -1,13 +1,11 @@
 /**
-	MovingPlatform - платформа, на которую Марио может запрыгнуть
-	и переместиться на ней по карте (например, над морем).
+	MovingPlatform - движущаяся платформа (например, над морем).
 
 	Это статический для коллизий объект (как Ship/Box), но при
 	этом самостоятельно двигается по горизонтали между left_bound
-	и right_bound, отражаясь от границ. Для того чтобы Марио
-	перемещался вместе с платформой, Mario::process_vertical_static_collision
-	дополнительно проверяет, не стоит ли он на MovingPlatform,
-	и, если да, переносит его на величину скорости платформы (get_speed().h).
+	и right_bound, отражаясь от границ. О том, кто на ней стоит,
+	платформа ничего не знает: она лишь сообщает свою скорость
+	через Rect::get_surface_speed().
 */
 
 #pragma once
@@ -28,11 +26,11 @@ namespace biv {
 				const float range
 			);
 
-			Speed get_speed() const noexcept;
+			Speed get_surface_speed() const noexcept override;
 
 			void move_horizontally() noexcept override;
 			// Платформа висит на фиксированной высоте и не подвержена
-			// гравитации (в отличие от Mario/Enemy) - без этого override
+			// гравитации (в отличие от движущихся объектов с гравитацией) - без этого override
 			// сработал бы дефолтный Movable::move_vertically(), который
 			// каждый кадр разгоняет её вниз, как при падении.
 			void move_vertically() noexcept override;

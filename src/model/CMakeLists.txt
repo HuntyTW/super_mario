@@ -5,7 +5,6 @@ target_sources(${PROJECT_NAME}
 		movable.cpp
 		rect.cpp
 		rect_map_movable_adapter.cpp
-		enemy_base.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE

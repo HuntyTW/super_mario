@@ -5,7 +5,7 @@
 using biv::Rect;
 
 Rect::Rect(const Coord& top_left, const int width, const int height)
-: top_left(top_left), width(width), height(height) {}
+	: top_left(top_left), width(width), height(height) {}
 
 int Rect::get_bottom() const noexcept {
 	return std::round(top_left.y + height);
@@ -35,6 +35,6 @@ float Rect::get_y() const noexcept {
 	return top_left.y;
 }
 
-biv::MovingPlatform* Rect::get_moving_platform() noexcept {
-	return nullptr;
+biv::Speed Rect::get_surface_speed() const noexcept {
+	return {0.0f, 0.0f};
 }

@@ -106,6 +106,8 @@ int main() {
 		game.check_mario_collision();
 		game.check_vertically_static_collisions();
 		
+		// Падение за карту убирает Марио даже когда он бессмертен
+		// (бессмертие защищает только от врагов).
 		if (
 			game_map->is_below_map(mario->get_top())
 			|| !mario->is_active()

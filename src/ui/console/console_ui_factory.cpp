@@ -15,6 +15,8 @@ void ConsoleUIFactory::clear_data() {
 	enemies.clear();
 	flying_enemies.clear();
 	jumping_enemies.clear();
+	hearts.clear();
+	heart_boxes.clear();
 	moneys.clear();
 	moving_platforms.clear();
 }
@@ -60,6 +62,28 @@ void ConsoleUIFactory::create_full_box(
 	game->add_map_movable(full_box);
 	game->add_static_obj(full_box);
 	game_map->add_obj(full_box);
+}
+
+void ConsoleUIFactory::create_heart(
+	const Coord& top_left, const int width, const int height
+) {
+	ConsoleHeart* heart = new ConsoleHeart(top_left, width, height);
+	hearts.push_back(heart);
+	game->add_map_movable(heart);
+	game->add_movable(heart);
+	game->add_collisionable(heart);
+	game_map->add_obj(heart);
+}
+
+void ConsoleUIFactory::create_heart_box(
+	const Coord& top_left, const int width, const int height
+) {
+	ConsoleHeartBox* heart_box = new ConsoleHeartBox(top_left, width, height, this);
+	heart_boxes.push_back(heart_box);
+	game->add_collisionable(heart_box);
+	game->add_map_movable(heart_box);
+	game->add_static_obj(heart_box);
+	game_map->add_obj(heart_box);
 }
 
 void ConsoleUIFactory::create_jumping_enemy(

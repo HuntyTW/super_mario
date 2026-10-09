@@ -3,7 +3,7 @@
 using biv::JumpingEnemy;
 
 JumpingEnemy::JumpingEnemy(const Coord& top_left, const int width, const int height)
-	: Enemy(top_left, width, height) {
+	: AbstractEnemy(top_left, width, height) {
 	hspeed = 0;
 }
 
