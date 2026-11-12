@@ -1,0 +1,19 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/sprites">
+        <file alias="mario.png">sprites/mario.png</file>
+        <file alias="mario_immortal.png">sprites/mario_immortal.png</file>
+        <file alias="box.png">sprites/box.png</file>
+        <file alias="full_box.png">sprites/full_box.png</file>
+        <file alias="full_box_empty.png">sprites/full_box_empty.png</file>
+        <file alias="heart_box.png">sprites/heart_box.png</file>
+        <file alias="enemy.png">sprites/enemy.png</file>
+        <file alias="jumping_enemy.png">sprites/jumping_enemy.png</file>
+        <file alias="flying_enemy.png">sprites/flying_enemy.png</file>
+        <file alias="money.png">sprites/money.png</file>
+        <file alias="heart.png">sprites/heart.png</file>
+        <file alias="ship.png">sprites/ship.png</file>
+        <file alias="ship_sub.png">sprites/ship_sub.png</file>
+        <file alias="moving_platform.png">sprites/moving_platform.png</file>
+    </qresource>
+</RCC>
