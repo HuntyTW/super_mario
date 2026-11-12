@@ -20,7 +20,15 @@
 */
 #include <thread>
 
-#include "console_ui_factory.hpp"
+#ifdef QT_GUI
+	#include <QApplication>
+	#include "qt_control_settings.hpp"
+	#include "qt_keyboard.hpp"
+	#include "qt_ui_factory.hpp"
+#else
+	#include "console_ui_factory.hpp"
+#endif
+
 #include "second_level.hpp"
 #include "game.hpp"
 #include "game_level.hpp"
@@ -39,7 +47,7 @@
 	#include "ncurses.h"
 #endif
 
-int main() {
+int main(int argc, char* argv[]) {
 	// 1. Установка параметров игры
 	using namespace std::chrono_literals;
 	
@@ -57,13 +65,24 @@ int main() {
 		control_settings = new biv::LinuxControlSettings(map_height, map_weight);
 		keyboard = new biv::LinuxKeyboard();
 		frame_delay = std::chrono::milliseconds(50);
+	#elif defined(QT_GUI)
+		QApplication app(argc, argv);
+		control_settings = new biv::QtControlSettings(map_height, map_weight);
+		keyboard = new biv::QtKeyBoard();
+		frame_delay = std::chrono::milliseconds(16);
 	#endif
 	
 	control_settings->init();
 	keyboard->on();
 	
 	biv::Game game;
-	biv::UIFactory* ui_factory = new biv::ConsoleUIFactory(&game);
+	biv::UIFactory* ui_factory = nullptr;
+	#ifdef QT_GUI
+		ui_factory = new biv::QtUIFactory(&game);
+	#else
+		ui_factory = new biv::ConsoleUIFactory(&game);
+	#endif
+
 	biv::GameMap* game_map = ui_factory->get_game_map(map_height, map_weight);
 	// ВРЕМЕННО (для теста платформ): старт сразу со второго уровня.
 	// Чтобы вернуть обычный старт с первого уровня - верни
