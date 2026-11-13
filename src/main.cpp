@@ -37,14 +37,7 @@ int main(int argc, char* argv[]) {
 	const int map_height = 30;
 	const int map_weight = 200;
 	
-	biv::AppFactory* app_factory = nullptr;
-	#ifdef WINDOWS_CONSOLE
-		app_factory = new biv::WindowsAppFactory();
-	#elif defined(LINUX_CONSOLE)
-		app_factory = new biv::LinuxAppFactory();
-	#elif defined(QT_GUI)
-		app_factory = new biv::QtAppFactory(argc, argv);
-	#endif
+	biv::AppFactory* app_factory = biv::AppFactory::create_app_factory(argc, argv);
 	
 	biv::KeyBoard* keyboard = app_factory->create_keyboard();
 	biv::OSControlSettings* control_settings = app_factory->create_control_settings(map_height, map_weight);

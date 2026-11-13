@@ -16,7 +16,25 @@ endif()
 set(SOURCES
 	main.cpp
 	app_factory.hpp
+	app_factory.cpp
 )
+
+if(GAME_TYPE STREQUAL "WindowsConsole")
+	list(APPEND SOURCES
+		windows_app_factory.hpp
+		windows_app_factory.cpp
+	)
+elseif(GAME_TYPE STREQUAL "LinuxConsole")
+	list(APPEND SOURCES
+		linux_app_factory.hpp
+		linux_app_factory.cpp
+	)
+elseif(GAME_TYPE STREQUAL "Qt")
+	list(APPEND SOURCES
+		qt_app_factory.hpp
+		qt_app_factory.cpp
+	)
+endif()
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
