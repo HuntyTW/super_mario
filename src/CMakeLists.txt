@@ -13,7 +13,10 @@ if(GAME_TYPE STREQUAL "Qt")
 	set(CMAKE_AUTORCC ON)
 endif()
 
-set(SOURCES main.cpp)
+set(SOURCES
+	main.cpp
+	app_factory.hpp
+)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 

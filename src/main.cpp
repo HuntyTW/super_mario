@@ -20,32 +20,15 @@
 */
 #include <thread>
 
-#ifdef QT_GUI
-	#include <QApplication>
-	#include "qt_control_settings.hpp"
-	#include "qt_keyboard.hpp"
-	#include "qt_ui_factory.hpp"
-#else
-	#include "console_ui_factory.hpp"
-#endif
-
-#include "second_level.hpp"
+#include "app_factory.hpp"
 #include "game.hpp"
 #include "game_level.hpp"
 #include "game_map.hpp"
 #include "keyboard.hpp"
 #include "mario.hpp"
 #include "os_control_settings.hpp"
+#include "second_level.hpp"
 #include "ui_factory.hpp"
-
-#ifdef WINDOWS_CONSOLE
-	#include "windows_control_settings.hpp"
-	#include "windows_keyboard.hpp"
-#elif defined(LINUX_CONSOLE)
-	#include "linux_control_settings.hpp"
-	#include "linux_keyboard.hpp"
-	#include "ncurses.h"
-#endif
 
 int main(int argc, char* argv[]) {
 	// 1. Установка параметров игры
@@ -53,35 +36,25 @@ int main(int argc, char* argv[]) {
 	
 	const int map_height = 30;
 	const int map_weight = 200;
-	auto frame_delay = std::chrono::milliseconds(0);
 	
-	biv::OSControlSettings* control_settings = nullptr;
-	biv::KeyBoard* keyboard = nullptr;
+	biv::AppFactory* app_factory = nullptr;
 	#ifdef WINDOWS_CONSOLE
-		control_settings = new biv::WindowsControlSettings(map_height, map_weight);
-		keyboard = new biv::WindowsKeyBoard();
-		frame_delay = std::chrono::milliseconds(10);
+		app_factory = new biv::WindowsConsoleAppFactory();
 	#elif defined(LINUX_CONSOLE)
-		control_settings = new biv::LinuxControlSettings(map_height, map_weight);
-		keyboard = new biv::LinuxKeyboard();
-		frame_delay = std::chrono::milliseconds(50);
+		app_factory = new biv::LinuxConsoleAppFactory();
 	#elif defined(QT_GUI)
-		QApplication app(argc, argv);
-		control_settings = new biv::QtControlSettings(map_height, map_weight);
-		keyboard = new biv::QtKeyBoard();
-		frame_delay = std::chrono::milliseconds(16);
+		app_factory = new biv::QtAppFactory(argc, argv);
 	#endif
+	
+	auto frame_delay = app_factory->get_frame_delay();
+	biv::OSControlSettings* control_settings = app_factory->create_control_settings(map_height, map_weight);
+	biv::KeyBoard* keyboard = app_factory->create_keyboard();
 	
 	control_settings->init();
 	keyboard->on();
 	
 	biv::Game game;
-	biv::UIFactory* ui_factory = nullptr;
-	#ifdef QT_GUI
-		ui_factory = new biv::QtUIFactory(&game);
-	#else
-		ui_factory = new biv::ConsoleUIFactory(&game);
-	#endif
+	biv::UIFactory* ui_factory = app_factory->create_ui_factory(&game);
 
 	biv::GameMap* game_map = ui_factory->get_game_map(map_height, map_weight);
 	// ВРЕМЕННО (для теста платформ): старт сразу со второго уровня.
@@ -162,4 +135,11 @@ int main(int argc, char* argv[]) {
 	);
 	
 	// 6. Завершение
+	delete game_level;
+	delete ui_factory;
+	delete keyboard;
+	delete control_settings;
+	delete app_factory;
+
+	return 0;
 }
