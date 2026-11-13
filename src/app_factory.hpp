@@ -55,7 +55,7 @@ namespace biv {
 	/**
 	 * Фабрика для работы в консоли Windows (cmd/PowerShell).
 	 */
-	class WindowsConsoleAppFactory : public AppFactory {
+	class WindowsAppFactory : public AppFactory {
 		public:
 			KeyBoard* create_keyboard() override {
 				return new WindowsKeyBoard();
@@ -73,11 +73,12 @@ namespace biv {
 				return std::chrono::milliseconds(10);
 			}
 	};
+	using WindowsConsoleAppFactory = WindowsAppFactory;
 #elif defined(LINUX_CONSOLE)
 	/**
 	 * Фабрика для работы в терминале Linux (ncurses).
 	 */
-	class LinuxConsoleAppFactory : public AppFactory {
+	class LinuxAppFactory : public AppFactory {
 		public:
 			KeyBoard* create_keyboard() override {
 				return new LinuxKeyboard();
@@ -95,6 +96,7 @@ namespace biv {
 				return std::chrono::milliseconds(50);
 			}
 	};
+	using LinuxConsoleAppFactory = LinuxAppFactory;
 #elif defined(QT_GUI)
 	/**
 	 * Фабрика для работы с графическим интерфейсом Qt.
@@ -124,6 +126,7 @@ namespace biv {
 				return std::chrono::milliseconds(16); // ~60 FPS
 			}
 	};
+	using QtFactory = QtAppFactory;
 #endif
 
 } // namespace biv

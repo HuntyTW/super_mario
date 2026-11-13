@@ -39,16 +39,16 @@ int main(int argc, char* argv[]) {
 	
 	biv::AppFactory* app_factory = nullptr;
 	#ifdef WINDOWS_CONSOLE
-		app_factory = new biv::WindowsConsoleAppFactory();
+		app_factory = new biv::WindowsAppFactory();
 	#elif defined(LINUX_CONSOLE)
-		app_factory = new biv::LinuxConsoleAppFactory();
+		app_factory = new biv::LinuxAppFactory();
 	#elif defined(QT_GUI)
 		app_factory = new biv::QtAppFactory(argc, argv);
 	#endif
 	
-	auto frame_delay = app_factory->get_frame_delay();
-	biv::OSControlSettings* control_settings = app_factory->create_control_settings(map_height, map_weight);
 	biv::KeyBoard* keyboard = app_factory->create_keyboard();
+	biv::OSControlSettings* control_settings = app_factory->create_control_settings(map_height, map_weight);
+	auto frame_delay = app_factory->get_frame_delay();
 	
 	control_settings->init();
 	keyboard->on();
